@@ -6,7 +6,6 @@
  *                                                                                                *
  ************************************************************************************************ */
 
-
 /**
  * Returns the 'Fizz','Buzz' or an original number using the following rules:
  * 1) return original number
@@ -27,10 +26,12 @@
  *  21 => 'Fizz'
  *
  */
-function getFizzBuzz(/* num */) {
-  throw new Error('Not implemented');
+function getFizzBuzz(num) {
+  if (num % 3 === 0 && num % 5 === 0) return 'FizzBuzz';
+  if (num % 3 === 0) return 'Fizz';
+  if (num % 5 === 0) return 'Buzz';
+  return num;
 }
-
 
 /**
  * Returns the factorial of the specified integer n.
@@ -43,10 +44,9 @@ function getFizzBuzz(/* num */) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
+function getFactorial(n) {
+  return n !== 1 ? n * getFactorial(n - 1) : 1;
 }
-
 
 /**
  * Returns the sum of integer numbers between n1 and n2 (inclusive).
@@ -60,10 +60,15 @@ function getFactorial(/* n */) {
  *   5,10  =>  45 ( = 5+6+7+8+9+10 )
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
-function getSumBetweenNumbers(/* n1, n2 */) {
-  throw new Error('Not implemented');
-}
+function getSumBetweenNumbers(n1, n2) {
+  let result = 0;
 
+  for (let i = n1; i <= n2; i += 1) {
+    result += i;
+  }
+
+  return result;
+}
 
 /**
  * Returns true, if a triangle can be built with the specified sides a, b, c
@@ -80,10 +85,9 @@ function getSumBetweenNumbers(/* n1, n2 */) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  return !(a + b <= c || a + c <= b || b + c <= a);
 }
-
 
 /**
  * Returns true, if two specified axis-aligned rectangles overlap, otherwise false.
@@ -117,10 +121,33 @@ function isTriangle(/* a, b, c */) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
-}
+function doRectanglesOverlap(rect1, rect2) {
+  const getCoordinatesOfCorners = (rectangle) => ({
+    tL: {
+      x: rectangle.left,
+      y: rectangle.top,
+    },
+    tR: {
+      x: rectangle.left + rectangle.width,
+      y: rectangle.top,
+    },
+    bL: {
+      x: rectangle.left,
+      y: rectangle.top + rectangle.height,
+    },
+    bR: {
+      x: rectangle.left + rectangle.width,
+      y: rectangle.top + rectangle.height,
+    },
+  });
+  const cR1 = getCoordinatesOfCorners(rect1);
+  const cR2 = getCoordinatesOfCorners(rect2);
 
+  const c = cR1.tL.x > cR2.bR.x;
+  const a = cR2.tL.x > cR1.bR.x;
+
+  return !(c || a || cR1.tL.y > cR2.bR.y || cR2.tL.y > cR1.bR.y);
+}
 
 /**
  * Returns true, if point lies inside the circle, otherwise false.
@@ -148,10 +175,14 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
-}
+function isInsideCircle(circle, point) {
+  const xC = circle.center.x - point.x;
+  const yC = circle.center.y - point.y;
 
+  const distance = Math.sqrt(xC ** 2 + yC ** 2);
+
+  return distance < circle.radius;
+}
 
 /**
  * Returns the first non repeated char in the specified strings otherwise returns null.
@@ -164,10 +195,22 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
-}
+function findFirstSingleChar(str) {
+  const numbersOfChars = {};
 
+  str
+    .split('')
+    .filter((element) => element !== ' ')
+    .forEach((char) => {
+      if (!numbersOfChars[char]) {
+        numbersOfChars[char] = 1;
+      } else {
+        numbersOfChars[char] += 1;
+      }
+    });
+
+  return Object.keys(numbersOfChars).find((key) => numbersOfChars[key] === 1);
+}
 
 /**
  * Returns the string representation of math interval,
@@ -191,10 +234,13 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
-}
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  const numbers = [a, b].sort((c, d) => c - d).join(', ');
+  const openedBracket = isStartIncluded ? '[' : '(';
+  const closedBracket = isEndIncluded ? ']' : ')';
 
+  return `${openedBracket}${numbers}${closedBracket}`;
+}
 
 /**
  * Reverse the specified string (put all chars in reverse order)
@@ -208,10 +254,9 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
-
 
 /**
  * Reverse the specified integer number (put all digits in reverse order)
@@ -225,10 +270,9 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  return parseFloat(num.toString().split('').reverse().join(''));
 }
-
 
 /**
  * Validates the CCN (credit card number) and return true if CCN is valid
@@ -250,8 +294,29 @@ function reverseInteger(/* num */) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const result = [];
+  const arrayOfNumbers = ccn
+    .toString()
+    .split('')
+    .reverse()
+    .map((string) => parseFloat(string));
+
+  arrayOfNumbers.forEach((number, index) => {
+    if (index % 2 !== 0) {
+      if (number * 2 > 9) {
+        result.push(number * 2 - 9);
+      } else {
+        result.push(number * 2);
+      }
+    } else {
+      result.push(number);
+    }
+  });
+
+  const sum = result.reduce((acc, number) => acc + number, 0);
+
+  return sum % 10 === 0;
 }
 
 /**
@@ -268,10 +333,16 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
-}
+function getDigitalRoot(num) {
+  const arrayOfNumbers = num
+    .toString()
+    .split('')
+    .map((string) => parseFloat(string));
+  const sum = arrayOfNumbers.reduce((acc, number) => acc + number, 0);
 
+  if (sum > 9) return getDigitalRoot(sum);
+  return sum;
+}
 
 /**
  * Returns true if the specified string has the balanced brackets and false otherwise.
@@ -294,10 +365,53 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
-}
+function isBracketsBalanced(str) {
+  const squareBrackets = {
+    opened: '[',
+    closed: ']',
+  };
+  const roundBrackets = {
+    opened: '(',
+    closed: ')',
+  };
+  const curlyBrackets = {
+    opened: '{',
+    closed: '}',
+  };
+  const angleBrackets = {
+    opened: '<',
+    closed: '>',
+  };
 
+  const arrayOfTypesOfBrackets = [
+    squareBrackets,
+    roundBrackets,
+    curlyBrackets,
+    angleBrackets,
+  ];
+  const arrayOfBrackets = str.split('');
+  const stack = [];
+
+  arrayOfBrackets.forEach((bracket) => {
+    arrayOfTypesOfBrackets.forEach((type) => {
+      const a = bracket === type.closed;
+      const b = stack[stack.length - 1] === type.opened;
+      const c = a && b;
+
+      if (Object.values(type).includes(bracket)) {
+        if (b && bracket === type.opened) {
+          stack.push(bracket);
+        } else if (c) {
+          stack.pop();
+        } else {
+          stack.push(bracket);
+        }
+      }
+    });
+  });
+
+  return stack.length === 0;
+}
 
 /**
  * Returns the string with n-ary (binary, ternary, etc, where n <= 10)
@@ -319,10 +433,9 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
-
 
 /**
  * Returns the common directory path for specified array of full filenames.
@@ -336,10 +449,34 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
-}
+function getCommonDirectoryPath(pathes) {
+  const stack = [];
+  let result = '';
+  const minLenghtOfPath = pathes.sort((a, b) => a.length - b.length)[0].length;
 
+  const recursion = (n) => {
+    if (n <= minLenghtOfPath) {
+      pathes.forEach((path) => {
+        if (stack.length === 0) {
+          stack.push(path[n]);
+        } else if (stack[stack.length - 1] === path[n]) {
+          stack.push(path[n]);
+        }
+      });
+
+      if (stack.length === pathes.length) {
+        result += [...new Set(stack)].join('');
+        stack.length = 0;
+      }
+
+      return recursion(n + 1);
+    }
+
+    return result.slice(0, result.lastIndexOf('/') + 1);
+  };
+
+  return recursion(0);
+}
 
 /**
  * Returns the product of two specified matrixes.
@@ -359,10 +496,22 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
-}
+function getMatrixProduct(m1, m2) {
+  const result = [];
 
+  for (let i = 0; i < m1.length; i += 1) {
+    result.push([]);
+    for (let j = 0; j < m2[0].length; j += 1) {
+      let sum = 0;
+      for (let k = 0; k < m1[0].length; k += 1) {
+        sum += m1[i][k] * m2[k][j];
+      }
+      result[i][j] = sum;
+    }
+  }
+
+  return result;
+}
 
 /**
  * Returns the evaluation of the specified tic-tac-toe position.
@@ -394,10 +543,24 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const mainDiag = new Set([position[0][0], position[1][1], position[2][2]]);
+  const secDiag = new Set([position[1][1], position[0][2], position[2][0]]);
+  if (mainDiag.size === 1) return Array.from(mainDiag)[0];
+  if (secDiag.size === 1) return Array.from(secDiag)[0];
+  for (let i = 0; i < position.length; i += 1) {
+    const l = position[i].length;
+    if (l === 3 && new Set(position[i]).size === 1 && position[i][0]) {
+      return position[i][0];
+    }
+    const column = [];
+    for (let j = 0; j < 3; j += 1) {
+      column.push(position[j][i]);
+    }
+    if (new Set(column).size === 1) return column[0];
+  }
+  return undefined;
 }
-
 
 module.exports = {
   getFizzBuzz,
